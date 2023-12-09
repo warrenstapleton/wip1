@@ -1,17 +1,17 @@
 .DS_Store
 .thumbs.db
-node_modules
+**/node_modules
 
 # Quasar core related directories
 .quasar
-/dist
-/quasar.config.*.temporary.compiled*
+/frontend/dist
+/frontend/quasar.config.*.temporary.compiled*
 
 # Cordova related directories and files
-/src-cordova/node_modules
-/src-cordova/platforms
-/src-cordova/plugins
-/src-cordova/www
+/frontend/src-cordova/node_modules
+/frontend/src-cordova/platforms
+/frontend/src-cordova/plugins
+/frontend/src-cordova/www
 
 # Capacitor related directories and files
 /src-capacitor/www

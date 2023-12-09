@@ -1,0 +1,14 @@
+scheduler:
+  cron: "0 3 */1 * *"
+  retention: 7
+  timeout: 120
+target:
+  host: "backup.stapleton.group"
+  port: 27017
+sftp:
+  host: "backup.stapleton.group"
+  port: 22
+  username: warren
+  password: password
+  private:key: /config/id_rsa
+  dir: /bck

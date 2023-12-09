@@ -1,0 +1,66 @@
+version: "3.7"
+
+services:
+  db:
+    container_name: mosaic_mongodb
+    image: mosaic/mongo
+    build:
+      context: mongo
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - mosaic_mongo_config:/data/config
+      - mosaic_mongo_db:/data/db
+      # production volumes
+      # - /srv/mongodb/config:/data/config
+      # - /srv/mongodb/data:/data/db
+    ports:
+      - "27018:27017"
+#    networks:
+#      - mybridge
+    # for automatic reverse proxy
+    environment:
+      - VIRTUAL_HOST=mosaic_db.stapleton.group
+      - VIRTUAL_PORT=mosaic_db.stapleton.group
+
+  # mongo database backup service
+  mgob:
+    container_name: mgob
+    image: mosaic/mgob:latest
+    build:
+      context: mgob
+      dockerfile: Dockerfile
+    volumes:
+      - mosaic_mgob_config:/config
+      - mosaic_mgob_storage:/storage
+      - mosaic_mgob_tmp:/tmp
+      - mosaic_mgob_data:/data
+      # production volumes
+      # - /srv/mgob/config:/config
+      # - /srv/mgob/storage:/storage
+      # - /srv/mgob/tmp:/tmp
+      # - /srv/mgob/data:/data
+    ports:
+      - "8090:8090"
+#    networks:
+#      - mybridge
+    # for automatic reverse proxy
+    environment:
+      - VIRTUAL_HOST=mosaic_mgob.stapleton.group
+      - VIRTUAL_PORT=mosaic_mgob.stapleton.group
+    restart: unless-stopped
+
+volumes:
+  mosaic_mongo_config:
+  mosaic_mongo_db:
+  mosaic_mgob_config:
+  mosaic_mgob_storage:
+  mosaic_mgob_tmp:
+  mosaic_mgob_data:
+
+# networks:
+#   mybridge:
+#     external: true
+#     name: mybridge
+
+
