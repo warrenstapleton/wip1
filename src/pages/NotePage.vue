@@ -20,26 +20,28 @@
         </q-form>
       </div>
       <div v-else>
-        <div class="row items-center justify-between">
-          <h3 class="q-mb-md q-mt-md">{{ note.title }}</h3>
-          <div>
-            <q-btn
-              round
-              color="secondary"
-              icon="edit"
-              @click="editing=true"
+        <div v-if="note">
+          <div class="row items-center justify-between">
+            <h3 class="q-mb-md q-mt-md">{{ note.title }}</h3>
+            <div>
+              <q-btn
+                round
+                color="secondary"
+                icon="edit"
+                @click="editing=true"
               ></q-btn>
-            <q-btn
-              class="q-ml-sm"
-              round
-              color="red"
-              icon="delete"
-              @click="remove"
+              <q-btn
+                class="q-ml-sm"
+                round
+                color="red"
+                icon="delete"
+                @click="remove"
               ></q-btn>
+            </div>
           </div>
+          <div>{{ note.description }}</div>
+          <div class="q-mt-md" v-html="note.content"></div>
         </div>
-        <div>{{ note.description }}</div>
-        <div class="q-mt-md" v-html="note.content"></div>
       </div>
     </Container>
 
