@@ -1,5 +1,6 @@
 {
   "@quasar/apollo": {
-    "subscriptions": false
+    "subscriptions": false,
+    "graphql_url": "http://localhost:4000"
   }
 }
