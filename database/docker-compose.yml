@@ -15,7 +15,7 @@ services:
       # - /srv/mongodb/config:/data/config
       # - /srv/mongodb/data:/data/db
     ports:
-      - "27018:27017"
+      - "27017:27017"
 #    networks:
 #      - mybridge
     # for automatic reverse proxy
