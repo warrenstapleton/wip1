@@ -1,6 +1,6 @@
 <template>
   <q-page padding>
-    <Container>
+    <NoteContainer>
       <h3>New Note</h3>
       <q-form @submit="submit">
         <q-input class="q-mt-sm" outlined v-model="note.title" label="Title"></q-input>
@@ -18,13 +18,13 @@
           <q-btn color="positive" class="q-ml-sm" type="submit">Create</q-btn>
         </div>
       </q-form>
-    </Container>
+    </NoteContainer>
   </q-page>
 </template>
 
 <script setup lang="ts">
 
-import Container from 'components/NoteContainer.vue'
+import NoteContainer from 'components/NoteContainer.vue'
 import {useNotesStore} from 'stores/notes';
 import {useRouter} from 'vue-router';
 import {ref} from 'vue';

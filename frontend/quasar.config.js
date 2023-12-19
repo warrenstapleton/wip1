@@ -11,6 +11,7 @@
 
 const { configure } = require('quasar/wrappers');
 
+console.log('warren: config.parsed=', require('dotenv').config().parsed)
 
 module.exports = configure(function (/* ctx */) {
   return {

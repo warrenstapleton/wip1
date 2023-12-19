@@ -6,11 +6,12 @@ export /* async */ function getClientOptions(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   /* {app, router, ...} */ options?: Partial<BootFileParams<any>>
 ) {
+  console.log('warren: GRAPHQL_URI= env=', process.env)
   const httpLink = createHttpLink({
     uri:
       process.env.GRAPHQL_URI ||
       // Change to your graphql endpoint.
-      '/graphql',
+      'http://localhost:4000/graphql', // warren: the GRAPHQL_URI env variable is not working.
   })
 
   return <ApolloClientOptions<unknown>>Object.assign(
@@ -19,6 +20,7 @@ export /* async */ function getClientOptions(
       link: httpLink,
 
       cache: new InMemoryCache(),
+      connectToDevTools: true
     },
 
     // Specific Quasar mode options.

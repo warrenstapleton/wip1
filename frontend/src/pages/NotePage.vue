@@ -1,6 +1,6 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <Container>
+    <NoteContainer>
       <div v-if="editing">
         <q-form @submit="editing = false">
           <q-input v-model="note.title" label="Title" filled></q-input>
@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 
-import Container from 'components/NoteContainer.vue'
+import NoteContainer from 'components/NoteContainer.vue'
 import {useNotesStore} from 'stores/notes'
 import {computed, ref} from 'vue';
 import {useRoute, useRouter} from 'vue-router';

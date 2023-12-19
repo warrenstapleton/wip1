@@ -1,0 +1,15 @@
+overwrites: true
+schema: src/schema.graphql
+documents: null
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "@graphql-codegen/typescript"
+      - "@graphql-codegen/typescript-resolvers"
+      - "@graphql-codegen/typescript-mongodb"
+      - "@graphql-codegen/typescript-document-nodes"
+    config:
+      useIndexSignature: true
+      dbInterfaceSuffix: "MyInterface"
+      dbTypeSuffix: "MyType"
+      idFieldName: "_id"
