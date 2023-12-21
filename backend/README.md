@@ -3,5 +3,6 @@
 ```bash
 npm install
 npm run codegen
-npm compile
-npm start```
+npm run compile
+npm run start
+```
