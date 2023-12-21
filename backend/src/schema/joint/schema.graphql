@@ -1,0 +1,10 @@
+
+extend type Query {
+  joint(id: ID!): Joint
+}
+
+type Joint {
+  id: ID!
+  destination: String!
+  source: String!
+}
