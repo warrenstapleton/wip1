@@ -1,8 +1,4 @@
-# Backend
+# graphql-mongodb-typescript-blog
 
-```bash
-npm install
-npm run codegen
-npm run compile
-npm run start
-```
+Please follow the detailed tutorial in the below link
+[See tutorial](https://www.universal-tutorial.com/graphql-tutorials/crud-with-graphql-nodejs-mongo-typescript)

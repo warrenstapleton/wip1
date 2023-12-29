@@ -1,18 +1,35 @@
-import { ApolloServer } from '@apollo/server';
-import { startStandaloneServer } from '@apollo/server/standalone';
-import { typeDefs } from './schema/typeDefs.generated.js';
-import { resolvers } from './schema/resolvers.generated.js';
+const dotenv = require('dotenv');
+dotenv.config();
 
-interface MyContext {
-  token?: String;
-}
+import express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import depthLimit from 'graphql-depth-limit';
+import { createServer } from 'http';
+import compression from 'compression';
+import cors from 'cors';
+import schema from './graphql/schema';
+import { MongoHelper } from './helpers/mongoHelpers';
 
-const server = new ApolloServer<MyContext>({ typeDefs, resolvers });
+const app = express();
+const mHelper = new MongoHelper();
+mHelper.initiateMongoConnection();
 
-const { url } = await startStandaloneServer(server, {
-  context: async ({ req })=> ({ token: req.headers.token }),
-  listen: { port: 4000 }
+const server = new ApolloServer({
+  schema,
+  validationRules: [depthLimit(7)],
+  introspection: true,
+  playground: true,
+  context: async ({ req }) => {
+    return await mHelper.validateUser(req);
+  },
 });
 
-console.log(`Server ready at ${url}`);
+app.use('*', cors());
+app.use(compression());
+server.applyMiddleware({ app, path: '/graphql' });
 
+const httpServer = createServer(app);
+
+httpServer.listen({ port: process.env.PORT }, (): void =>
+  console.log(`\n🚀 GraphQL is now running on http://localhost:${process.env.PORT}/graphql`)
+);
