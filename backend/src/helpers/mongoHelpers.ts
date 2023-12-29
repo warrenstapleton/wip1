@@ -1,5 +1,6 @@
-const User = require('../models/users');
-import mongoose = require('mongoose');
+// const User = require('../models/users');
+import User from '../models/users.js';
+import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
 import { Config } from '../config';
 export class MongoHelper {
@@ -9,7 +10,7 @@ export class MongoHelper {
    */
   public async validateUser(req: any) {
     const token = req.headers.authorization || '';
-    console.log("warren: validateUser token=", token)
+    //console.log("warren: validateUser token=", token)
     try {
       // console.log("warren: salt=",<string>process.env.auth_encryption_salt)
       const payload = <{ data: string; iat: number }>(
@@ -36,11 +37,9 @@ export class MongoHelper {
    */
   public initiateMongoConnection(): void {
     (<any>mongoose).Promise = global.Promise;
-    console.log("WARREN mongoUrl=", Config.mongoUrl)
+    // console.log("warren: mongoUrl=", Config.mongoUrl)
     mongoose
       .connect(Config.mongoUrl, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
       })
       .then(() => {
         console.log('Connected to MongoDb');

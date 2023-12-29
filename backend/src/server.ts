@@ -1,4 +1,5 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
+
 dotenv.config();
 
 import express from 'express';
@@ -7,8 +8,8 @@ import depthLimit from 'graphql-depth-limit';
 import { createServer } from 'http';
 import compression from 'compression';
 import cors from 'cors';
-import schema from './graphql/schema';
-import { MongoHelper } from './helpers/mongoHelpers';
+import schema from './graphql/schema.graphql';
+import { MongoHelper } from './helpers/mongoHelpers.js';
 
 const app = express();
 const mHelper = new MongoHelper();
@@ -18,7 +19,6 @@ const server = new ApolloServer({
   schema,
   validationRules: [depthLimit(7)],
   introspection: true,
-  playground: true,
   context: async ({ req }) => {
     return await mHelper.validateUser(req);
   },
@@ -26,6 +26,8 @@ const server = new ApolloServer({
 
 app.use('*', cors());
 app.use(compression());
+
+await server.start()
 server.applyMiddleware({ app, path: '/graphql' });
 
 const httpServer = createServer(app);

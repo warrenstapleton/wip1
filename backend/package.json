@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "Blog starter with GraphQL,Typescript,MongoDB",
   "main": "dist/server.js",
+  "type": "module",
   "scripts": {
     "start": "npm run build && node dist/server.js",
     "build": "tsc -p . && ncp src/graphql/schemas/ dist/graphql/schemas",
     "start:dev": "npm run build:dev",
-    "build:dev": "nodemon src/server.ts --exec ts-node src/server.ts -e ts,graphql"
+    "build:dev": "nodemon src/server.ts --exec ts-node --esm src/server.ts -e ts,graphql"
   },
   "keywords": [
     "nodejs",
@@ -19,31 +20,35 @@
   "author": "Universal Tutorial",
   "license": "MIT",
   "devDependencies": {
-    "@types/compression": "^0.0.36",
+    "@types/compression": "^1.7.5",
     "@types/express": "^4.17.8",
-    "@types/graphql": "^14.5.0",
     "@types/graphql-depth-limit": "^1.1.2",
-    "@types/jsonwebtoken": "^8.5.0",
-    "@types/mongoose": "^5.7.36",
-    "@types/node": "^11.15.27",
-    "nodemon": "^1.19.4"
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.5",
+    "nodemon": "^3.0.2",
+    "@tsconfig/node21": "^21.0.0"
   },
   "dependencies": {
-    "apollo-server-express": "^2.17.0",
+    "apollo-server-express": "^3.13.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.3.1",
     "express": "^4.17.1",
-    "graphql": "^14.7.0",
+    "graphql": "^16.8.1",
+    "@graphql-tools/schema": "^10.0.2",
+    "@graphql-tools/utils": "^10.0.12",
     "graphql-depth-limit": "^1.1.0",
-    "graphql-import": "^0.7.1",
-    "graphql-import-node": "^0.0.1",
-    "http": "^0.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.6",
+    "graphql-import": "^1.0.2",
+    "graphql-import-node": "^0.0.5",
+    "http": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3",
     "ncp": "^2.0.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.7"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

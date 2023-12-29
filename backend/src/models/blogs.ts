@@ -1,5 +1,5 @@
-import mongoose = require('mongoose');
-require('./comments');
+import * as mongoose from 'mongoose';
+import './comments';
 
 const BlogSchema = new mongoose.Schema(
   {
@@ -25,4 +25,4 @@ const BlogSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Blog', BlogSchema);
+export default mongoose.model('Blog', BlogSchema);

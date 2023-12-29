@@ -1,5 +1,5 @@
-import mongoose = require("mongoose");
-const User = require('./users');
+import * as mongoose from 'mongoose';
+import User from './users';
 
 const CommentSchema = new mongoose.Schema(
   {
@@ -18,4 +18,4 @@ const CommentSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Comment', CommentSchema);
+export default mongoose.model('Comment', CommentSchema);

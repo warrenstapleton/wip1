@@ -1,6 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Context } from '../../models/context';
-import { IResolvers } from 'graphql-tools';
+import { IResolvers } from '@graphql-tools/utils';
 import * as jwt from 'jsonwebtoken';
 import { BlogsController } from '../../controllers/blogs.controller';
 import { CommentsController } from '../../controllers/comments.controller';
@@ -21,7 +21,7 @@ const resolvers: IResolvers = {
     },
     token: (_, args: any) => {
       const t = jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
-      console.log("warren: token resolver: args=",args,"salt=",<string>process.env.auth_encryption_salt,"t=",t);
+      // console.log("warren: token resolver: args=",args,"salt=",<string>process.env.auth_encryption_salt,"t=",t);
       return t;
     },
   },
