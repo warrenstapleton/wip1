@@ -1,11 +1,11 @@
-import { Context } from '../models/context';
-import { VerifyAuthorization } from '../decorators/auth.decorator';
+import { Context } from '../models/context.js';
+import { VerifyAuthorization } from '../decorators/auth.decorator.js';
 
-const Blogs = require('../models/blogs');
+import Blogs from '../models/blogs.js';
 
 export class BlogsController {
   @VerifyAuthorization
-  getBlog(args: any, ctx: Context) {
+  getBlog(args: any, _: Context) {
     return Blogs.find({ url: args['url'] })
       .populate({
         path: 'comments',
@@ -21,7 +21,7 @@ export class BlogsController {
   }
 
   @VerifyAuthorization
-  getBlogs(args: any, ctx: any) {
+  getBlogs(args: any, _: any) {
     return Blogs.find()
       .populate({
         path: 'comments',
@@ -37,14 +37,14 @@ export class BlogsController {
   }
 
   @VerifyAuthorization
-  addBlog(inputObject: any, ctx: any) {
+  addBlog(inputObject: any, _: any) {
     return Blogs.create(inputObject.input).then((blogInfo: any) => {
       return blogInfo;
     });
   }
 
   @VerifyAuthorization
-  updateBlog(inputObject: any, ctx: any) {
+  updateBlog(inputObject: any, _: any) {
     return Blogs.findOneAndUpdate({ _id: inputObject.id }, inputObject.input, { new: true }).then(
       (blogInfo: any) => {
         return blogInfo;
@@ -53,7 +53,7 @@ export class BlogsController {
   }
 
   @VerifyAuthorization
-  deleteBlog(inputObject: any, ctx: any) {
+  deleteBlog(inputObject: any, _: any) {
     return Blogs.findOneAndDelete({ _id: inputObject.id }).then((blogInfo: any) => {
       return blogInfo;
     });

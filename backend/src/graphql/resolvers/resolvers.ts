@@ -1,11 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { Context } from '../../models/context';
+import { Context } from '../../models/context.js';
 import { IResolvers } from '@graphql-tools/utils';
 import * as jwt from 'jsonwebtoken';
-import { BlogsController } from '../../controllers/blogs.controller';
-import { CommentsController } from '../../controllers/comments.controller';
-import { AppConstants } from '../../constants/app.constants';
-import { UsersController } from '../../controllers/users.controller';
+import { BlogsController } from '../../controllers/blogs.controller.js';
+import { CommentsController } from '../../controllers/comments.controller.js';
+import { AppConstants } from '../../constants/app.constants.js';
+import { UsersController } from '../../controllers/users.controller.js';
 
 const blogController = new BlogsController();
 const commentsController = new CommentsController();

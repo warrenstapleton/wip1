@@ -2,7 +2,7 @@
 import User from '../models/users.js';
 import * as mongoose from 'mongoose';
 import * as jwt from 'jsonwebtoken';
-import { Config } from '../config';
+import { Config } from '../config.js';
 export class MongoHelper {
   /**
    * This function returns either true of false based information present in the database

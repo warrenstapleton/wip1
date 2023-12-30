@@ -1,6 +1,6 @@
-import { Context } from '../models/context';
+import { Context } from '../models/context.js';
 
-const Users = require('../models/users');
+import Users from '../models/users.js';
 
 export class UsersController {
   addUser(inputObject: any, ctx: Context) {

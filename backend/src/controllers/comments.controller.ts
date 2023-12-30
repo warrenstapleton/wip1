@@ -1,9 +1,8 @@
-import { VerifyAuthorization } from '../decorators/auth.decorator';
-import { Context } from '../models/context';
-import * as jwt from 'jsonwebtoken';
-const Comments = require('../models/comments');
-const Blogs = require('../models/blogs');
-const Users = require('../models/users');
+import { VerifyAuthorization } from '../decorators/auth.decorator.js';
+import { Context } from '../models/context.js';
+import Comments from '../models/comments.js';
+import Blogs from '../models/blogs.js';
+import Users from '../models/users.js';
 
 export class CommentsController {
   @VerifyAuthorization
@@ -16,7 +15,7 @@ export class CommentsController {
       .then((commentInfo: any) => {
         return Blogs.findOneAndUpdate(
           {
-            url: inputObject.blogUrl,
+            url: inputObject.blogUrl
           },
           { $push: { comments: commentInfo._id } },
           { new: true }
@@ -25,8 +24,8 @@ export class CommentsController {
           model: 'Comment',
           populate: {
             path: 'user',
-            model: 'User',
-          },
+            model: 'User'
+          }
         });
       })
       .catch((err: any) => {

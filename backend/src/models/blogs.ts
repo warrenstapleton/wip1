@@ -1,7 +1,17 @@
-import * as mongoose from 'mongoose';
-import './comments';
+import { model, Schema, Types } from 'mongoose';
+import './comments.js';
 
-const BlogSchema = new mongoose.Schema(
+export interface IBlog {
+  title: string;
+  description: string;
+  body: string;
+  keywords: string;
+  url: string;
+  adsRequired: boolean;
+  comments: [type: Types.ObjectId];
+}
+
+const BlogSchema = new Schema<IBlog>(
   {
     title: { type: String, required: true },
     description: String,
@@ -10,19 +20,19 @@ const BlogSchema = new mongoose.Schema(
     url: {
       type: String,
       required: true,
-      index: { unique: true },
+      index: { unique: true }
     },
     adsRequired: Boolean,
     comments: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment',
-      },
-    ],
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+      }
+    ]
   },
   {
-    timestamps: true,
+    timestamps: true
   }
 );
 
-export default mongoose.model('Blog', BlogSchema);
+export default model<IBlog>('Blog', BlogSchema);
