@@ -1,6 +1,6 @@
 import { GraphQLError } from 'graphql';
-import { AppConstants } from '../constants/app.constants';
-import { ErrorConstants } from '../constants/errors.constants';
+import { AppConstants } from '../constants/app.constants.js';
+import { ErrorConstants } from '../constants/errors.constants.js';
 
 export function VerifyAuthorization(
   _target: any,
