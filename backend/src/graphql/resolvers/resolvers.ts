@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { Context } from '../../models/context.js';
 import { IResolvers } from '@graphql-tools/utils';
-import * as jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { BlogsController } from '../../controllers/blogs.controller.js';
 import { CommentsController } from '../../controllers/comments.controller.js';
 import { AppConstants } from '../../constants/app.constants.js';
