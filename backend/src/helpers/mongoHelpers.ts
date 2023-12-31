@@ -33,13 +33,12 @@ export class MongoHelper {
     // (<any>mongoose).Promise = global.Promise;
     const mongoUrl = process.env.mongo_url
     mongoose
-      .connect(mongoUrl, {
-      })
+      .connect(mongoUrl, {})
       .then(() => {
         console.log('Connected to MongoDb');
       })
       .catch((err: Error) => {
-        throw `There is error in connecting Mongo DB ${err.message}`;
+        throw `There is error in connecting Mongo DB: ${err.message}`;
       });
   }
 }

@@ -11,18 +11,3 @@ const schema = loadSchemaSync(join(dirname(import.meta.url), './schemas/schema.g
 const schemaWithResolvers = addResolversToSchema({ schema, resolvers });
 
 export default schemaWithResolvers;
-
-// // import 'graphql-import-node';
-// import {importSchema} from 'graphql-import';
-// // import * as rootDefs from './schemas/schema.graphql';
-// import { makeExecutableSchema } from '@graphql-tools/schema';
-// import resolvers from './resolvers/resolvers.js';
-//
-// const typeDefs = importSchema("./schemas/schema.graphql")
-// const schema = makeExecutableSchema({
-//   // typeDefs: [rootDefs],
-//   typeDefs,
-//   resolvers,
-// });
-
-// export default schema;
