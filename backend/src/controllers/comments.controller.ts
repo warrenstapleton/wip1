@@ -5,7 +5,7 @@ import Blogs from '../models/blogs.js';
 import Users from '../models/users.js';
 
 export class CommentsController {
-  // @VerifyAuthorization warren:TODO
+  // @VerifyAuthorization
   async addComment(inputObject: any, _ctx: Context) {
     const userMongoId = await Users.findOne({ email: _ctx.email }).then((userObject: any) => {
       return userObject._id;
@@ -33,7 +33,7 @@ export class CommentsController {
       });
   }
 
-  // @VerifyAuthorization
+  @VerifyAuthorization
   updateComment(inputObject: any, _ctx: Context) {
     return Comments.findOneAndUpdate({ _id: inputObject.id }, inputObject.input, { new: true }).then(
       (blogInfo: any) => {
@@ -42,7 +42,7 @@ export class CommentsController {
     );
   }
 
-  // @VerifyAuthorization
+  @VerifyAuthorization
   deleteComment(inputObject: any, _ctx: Context) {
     return Comments.findOneAndDelete({ _id: inputObject.id }).then((blogInfo: any) => {
       return blogInfo;

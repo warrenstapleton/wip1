@@ -20,9 +20,7 @@ const resolvers: IResolvers = {
       return blogController.getBlogs(args, ctx);
     },
     token: (_, args: any) => {
-      const t = jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
-      // console.log("warren: token resolver: args=",args,"salt=",<string>process.env.auth_encryption_salt,"t=",t);
-      return t;
+      return jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
     },
   },
 

@@ -1,8 +1,8 @@
 // const User = require('../models/users');
 import User from '../models/users.js';
 import * as mongoose from 'mongoose';
-import * as jwt from 'jsonwebtoken';
-import { Config } from '../config.js';
+import jwt from 'jsonwebtoken';
+// import { Config } from '../config.js';
 export class MongoHelper {
   /**
    * This function returns either true of false based information present in the database
@@ -10,24 +10,18 @@ export class MongoHelper {
    */
   public async validateUser(req: any) {
     const token = req.headers.authorization || '';
-    //console.log("warren: validateUser token=", token)
     try {
-      // console.log("warren: salt=",<string>process.env.auth_encryption_salt)
       const payload = <{ data: string; iat: number }>(
         jwt.verify(token, <string>process.env.auth_encryption_salt)
       );
       const email = payload['data'];
       return await User.find({ email: email }).then((response: any) => {
-        // console.log("warren: find returned")
         if (response.length > 0) {
-          // console.log("warren: isUserLogged: true")
           return { isUserLogged: true, email: email };
         }
-        // console.log("warren: isUserLogged: false")
         return { isUserLogged: false };
       });
     } catch (error) {
-      // console.log("warren: error=",error)
       return { isUserLogged: false };
     }
   }
@@ -36,10 +30,10 @@ export class MongoHelper {
    * This function will initiate the Mongo Database connection
    */
   public initiateMongoConnection(): void {
-    (<any>mongoose).Promise = global.Promise;
-    // console.log("warren: mongoUrl=", Config.mongoUrl)
+    // (<any>mongoose).Promise = global.Promise;
+    const mongoUrl = process.env.mongo_url
     mongoose
-      .connect(Config.mongoUrl, {
+      .connect(mongoUrl, {
       })
       .then(() => {
         console.log('Connected to MongoDb');
