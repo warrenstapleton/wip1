@@ -10,7 +10,7 @@ const mHelper = new MongoHelper();
 mHelper.initiateMongoConnection();
 
 interface MyContext {
-  token?: String;
+  token?: string;
 }
 
 const server = new ApolloServer<MyContext>(

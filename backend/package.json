@@ -1,12 +1,12 @@
 {
-  "name": "graphql-mongodb-typescript-blog",
+  "name": "mosaic",
   "version": "1.0.0",
   "description": "Blog starter with GraphQL,Typescript,MongoDB",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
     "start": "npm run build && node dist/server.js",
-    "build": "tsc",
+    "build": "tsc -p . && ncp src/graphql/schemas/ dist/graphql/schemas",
     "start:dev": "npm run build:dev",
     "build:dev": "nodemon src/server.ts --exec ts-node-esm --esm src/server.ts -e ts,graphql"
   },

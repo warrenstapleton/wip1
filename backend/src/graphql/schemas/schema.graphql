@@ -26,6 +26,18 @@ type User {
   photoUrl: String
 }
 
+type Project {
+  name: String
+  owner: String
+  completed: Boolean
+}
+
+type Query {
+  projects: [Project]
+#  project(id: ID!): Project
+#  project(name: String): Project
+}
+
 type Query {
   blogs: [Blog]
 }
@@ -70,6 +82,14 @@ type Mutation {
   updateUser(id: String, input: InputUser!): User
 }
 
+type Mutation {
+  addProject(input: InputProject!): Project
+}
+
+type Mutation {
+  updateProject(id: String, input: InputProject!): Project
+}
+
 input InputBlog {
   title: String
   description: String
@@ -95,4 +115,10 @@ input InputUser {
   name: String
   provider: String
   photoUrl: String
+}
+
+input InputProject {
+  name: String
+  owner: String
+  completed: Boolean
 }

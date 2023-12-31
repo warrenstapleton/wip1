@@ -2,11 +2,13 @@ import { GraphQLResolveInfo } from 'graphql';
 import { Context } from '../../models/context.js';
 import { IResolvers } from '@graphql-tools/utils';
 import jwt from 'jsonwebtoken';
+import { ProjectsController } from '../../controllers/projects.controller.js';
 import { BlogsController } from '../../controllers/blogs.controller.js';
 import { CommentsController } from '../../controllers/comments.controller.js';
 import { AppConstants } from '../../constants/app.constants.js';
 import { UsersController } from '../../controllers/users.controller.js';
 
+const projectController = new ProjectsController();
 const blogController = new BlogsController();
 const commentsController = new CommentsController();
 const usersController = new UsersController();
@@ -22,6 +24,9 @@ const resolvers: IResolvers = {
     token: (_, args: any) => {
       return jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
     },
+    projects: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return projectController.getProjects(args, ctx);
+    }
   },
 
   Mutation: {
@@ -49,7 +54,13 @@ const resolvers: IResolvers = {
     updateUser: (_, inputObject, ctx: Context) => {
       return usersController.updateUser(inputObject, ctx);
     },
-  },
+    addProject: (_, inputObject, ctx: Context) => {
+      return projectController.addProject(inputObject, ctx);
+    },
+    updateProject: (_, inputObject, ctx: Context) => {
+      return projectController.updateProject(inputObject, ctx);
+    }
+  }
 };
 
 export default resolvers;

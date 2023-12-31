@@ -3,26 +3,24 @@
 import { model, Schema } from 'mongoose';
 
 // 1. Create an interface representing a document in MongoDB.
-export interface IUser {
-  email: string;
+export interface IProject {
   name: string;
-  photoUrl?: string;
-  provider: string;
+  owner: string;
+  completed: boolean;
 }
 
 // 2. Create a Schema corresponding to the document interface.
-const UserSchema = new Schema<IUser>({
-    email: {
-      type: String,
-      required: true
-    },
+const ProjectSchema = new Schema<IProject>({
     name: {
       type: String,
       required: true
     },
-    photoUrl: String,
-    provider: {
+    owner: {
       type: String,
+      required: true
+    },
+    completed: {
+      type: Boolean,
       required: true
     }
   },
@@ -31,4 +29,4 @@ const UserSchema = new Schema<IUser>({
   });
 
 // 3. Create a Model.
-export default model<IUser>('User', UserSchema);
+export default model<IProject>('Project ', ProjectSchema);
