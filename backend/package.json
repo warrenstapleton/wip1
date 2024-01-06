@@ -2,13 +2,12 @@
   "name": "mosaic",
   "version": "1.0.0",
   "description": "Blog starter with GraphQL,Typescript,MongoDB",
-  "main": "dist/server.js",
   "type": "module",
   "scripts": {
     "start": "npm run build && node dist/server.js",
     "build": "tsc -p . && ncp src/graphql/schemas/ dist/graphql/schemas",
     "start:dev": "npm run build:dev",
-    "build:dev": "nodemon src/server.ts --exec ts-node-esm --esm src/server.ts -e ts,graphql"
+    "build:dev": "nodemon src/server.ts --exec ts-node-esm src/server.ts -e ts,graphql"
   },
   "keywords": [
     "nodejs",
@@ -21,6 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "@types/compression": "^1.7.5",
+    "@types/mongoose": "^5.11.97",
     "@types/express": "^4.17.8",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.10.5",

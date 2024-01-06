@@ -26,6 +26,9 @@ const resolvers: IResolvers = {
     },
     projects: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
       return projectController.getProjects(args, ctx);
+    },
+    project: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      return projectController.getProject(args, ctx);
     }
   },
 

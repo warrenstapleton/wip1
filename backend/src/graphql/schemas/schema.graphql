@@ -27,6 +27,7 @@ type User {
 }
 
 type Project {
+  id: ID!
   name: String
   owner: String
   completed: Boolean
@@ -34,7 +35,7 @@ type Project {
 
 type Query {
   projects: [Project]
-#  project(id: ID!): Project
+  project(id: ID!): Project
 #  project(name: String): Project
 }
 
@@ -87,7 +88,7 @@ type Mutation {
 }
 
 type Mutation {
-  updateProject(id: String, input: InputProject!): Project
+  updateProject(id: ID!, input: InputProject!): Project
 }
 
 input InputBlog {

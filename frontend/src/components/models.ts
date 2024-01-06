@@ -7,16 +7,16 @@ export interface Meta {
   totalCount: number;
 }
 
-export interface INote {
-  title: string
-  description: string
-  content: string
+export interface IProject {
+  name: string
+  owner: string
+  completed: boolean
 }
 
-export class Note implements INote {
+export class Project implements IProject {
   constructor(
-    public title: string = '',
-    public description: string = '',
-    public content: string = ''
+    public name: string = '',
+    public owner: string = '',
+    public completed: boolean = false
   ) {}
 }
