@@ -88,7 +88,11 @@ type Mutation {
 }
 
 type Mutation {
-  updateProject(id: ID!, input: InputProject!): Project
+  updateProject(id: String, input: InputProject!): Project
+}
+
+type Mutation {
+  deleteProject(id: String): Project
 }
 
 input InputBlog {

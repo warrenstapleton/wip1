@@ -61,8 +61,13 @@ const resolvers: IResolvers = {
       return projectController.addProject(inputObject, ctx);
     },
     updateProject: (_, inputObject, ctx: Context) => {
+      console.log("warren: server: updateProject, inputObject=", inputObject)
       return projectController.updateProject(inputObject, ctx);
-    }
+    },
+    deleteProject: (_, inputObject, ctx: Context) => {
+      console.log("warren: server: deleteProject, inputObject=", inputObject)
+      return projectController.deleteProject(inputObject, ctx);
+    },
   }
 };
 

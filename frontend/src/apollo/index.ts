@@ -1,6 +1,8 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
-import { createHttpLink, InMemoryCache } from '@apollo/client/core'
+import { ApolloLink, createHttpLink, InMemoryCache } from '@apollo/client/core';
 import type { BootFileParams } from '@quasar/app-vite'
+import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 
 export /* async */ function getClientOptions(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
@@ -14,10 +16,28 @@ export /* async */ function getClientOptions(
       'http://localhost:4000/graphql', // warren: the GRAPHQL_URI env variable is not working.
   })
 
+  const errorLink = onError(({ graphQLErrors }) => {
+    if (graphQLErrors) graphQLErrors.map(({ message }) => console.log(message))
+  })
+
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    // const token = localStorage.getItem('token');
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiYXNrQHVuaXZlcnNhbC10dXRvcmlhbC5jb20iLCJpYXQiOjE3MDQ4Mzk2MjZ9.A1iSXfAUAOeURnKBXLf1hbtanzhlIqlosiXhPTGmLBI'
+    // return the headers to the context so httpLink can read them
+    return {
+      headers: {
+        ...headers,
+        // authorization: token ? `Bearer ${token}` : "",
+        authorization: token
+      }
+    }
+  });
+
   return <ApolloClientOptions<unknown>>Object.assign(
     // General options.
     <ApolloClientOptions<unknown>>{
-      link: httpLink,
+      link: ApolloLink.from([errorLink, authLink, httpLink]),
 
       cache: new InMemoryCache(),
       connectToDevTools: true

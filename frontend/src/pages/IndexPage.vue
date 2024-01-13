@@ -8,14 +8,13 @@
 <!--               @click="doAddJoint('a1', 'b2', 't3')"></q-btn>-->
 
       </div>
-      <ProjectCard v-for='({ name, owner, completed}, idx) in projects'
-                   :key='idx'
-                   :name='name'
-                   :owner='owner'
-                   :completed='completed'
-                   @click='router.push(`/project/${idx}`)' />
+      <ProjectCard  v-for='project in projects'
+                   :key='project.id'
+                   :name='project.name'
+                   :owner='project.owner'
+                   :completed='project.completed'
+                    @click='router.push(`/project/${project.id}`)' ></ProjectCard>
       <div v-if='projects.length === 0'>You have not created any projects.</div>
-      result={{ result }}
     </ProjectContainer>
   </q-page>
 </template>
@@ -24,15 +23,16 @@
 
 import ProjectContainer from 'components/ProjectContainer.vue';
 import ProjectCard from 'components/ProjectCard.vue';
-import { useProjectsStore } from 'stores/projects.js';
+// import { useProjectsStore } from 'stores/projects.js';
 import { useRouter } from 'vue-router';
-import { storeToRefs } from 'pinia';
+// import { storeToRefs } from 'pinia';
+import { computed, watch } from 'vue';
 
-const projectStore = useProjectsStore();
-const { projects } = storeToRefs(projectStore);
+// const projectStore = useProjectsStore();
+// const { projects } = storeToRefs(projectStore);
 const router = useRouter();
 
-import { useMutation, useQuery } from '@vue/apollo-composable';
+import { useQuery } from '@vue/apollo-composable';
 import { gql } from '@apollo/client/core';
 
 // const { mutate: addJoint } = useMutation(gql`
@@ -48,8 +48,9 @@ import { gql } from '@apollo/client/core';
 // };
 
 const { result } = useQuery(gql`
-      query project {
+      query projects {
         projects {
+          id
           name
           owner
           completed
@@ -58,5 +59,10 @@ const { result } = useQuery(gql`
     `
 );
 
+const projects = computed(() => result?.value?.projects ?? [])
+
+watch(result, value => {
+  console.log('warren: result.value=',value)
+})
 
 </script>

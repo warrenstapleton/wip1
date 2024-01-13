@@ -2,46 +2,72 @@
   <q-page padding>
     <ProjectContainer>
       <h3>New Project</h3>
-      <q-form @submit="submit">
-        <q-input class="q-mt-sm" outlined v-model="project.name" label="Name"></q-input>
+      <q-form @submit='submit'>
+        <q-input class='q-mt-sm' outlined v-model='project.name' label='Name'></q-input>
         <q-input
-          class="q-mt-sm"
+          class='q-mt-sm'
           outlined
-          v-model="project.owner"
-          label="Owner"
+          v-model='project.owner'
+          label='Owner'
           dense></q-input>
-        <q-card flat bordered class="q-mt-sm">
-<!--          <q-editor v-model="project.owner" min-height="5rem"></q-editor>-->
-          <q-checkbox v-model="project.completed"></q-checkbox>
+        <q-card flat bordered class='q-mt-sm'>
+          <!--          <q-editor v-model="project.owner" min-height="5rem"></q-editor>-->
+          <q-checkbox v-model='project.completed'></q-checkbox>
         </q-card>
-        <div class="q-mt-sm">
-          <q-btn color="negative" to="/" type="reset">Cancel</q-btn>
-          <q-btn color="positive" class="q-ml-sm" type="submit">Create</q-btn>
+        <div class='q-mt-sm'>
+          <q-btn color='negative' to='/' type='reset'>Cancel</q-btn>
+          <q-btn color='positive' class='q-ml-sm' type='submit'>Create</q-btn>
         </div>
       </q-form>
     </ProjectContainer>
   </q-page>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 
-import ProjectContainer from 'components/ProjectContainer.vue'
-import {useProjectsStore} from 'stores/projects';
-import {useRouter} from 'vue-router';
-import {ref} from 'vue';
-import {Project} from 'components/models';
-import {storeToRefs} from 'pinia';
+import ProjectContainer from 'components/ProjectContainer.vue';
+// import { useProjectsStore } from 'stores/projects';
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { Project } from 'components/models';
+// import { storeToRefs } from 'pinia';
+import { useMutation } from '@vue/apollo-composable';
+import { gql } from '@apollo/client/core';
 
 
-const projectsStore = useProjectsStore();
-const {projects} = storeToRefs(projectsStore);
+// const projectsStore = useProjectsStore();
+// const { projects } = storeToRefs(projectsStore);
 const router = useRouter();
 
-const project = ref(new Project())
+const project = ref(new Project());
+
+const ADD_PROJECT = gql`
+      mutation addProject($input: InputProject!) {
+        addProject(input: $input) {
+          name
+          owner
+          completed
+        }
+      }
+    `;
+
+const { mutate: addProject} = useMutation(ADD_PROJECT);
+
 const submit = () => {
-  projects.value.unshift(project.value)
-  router.push('/')
-  project.value = new Project()
-}
+  console.log('warren: submit ADD_PROJECT=',ADD_PROJECT)
+  const r = addProject(
+    {
+      input: {
+        name: project.value.name,
+        owner: project.value.owner,
+        completed: project.value.completed
+      }
+    }
+  );
+  console.log('warren: addProject r=',r)
+  // projects.value.unshift(project.value)
+  router.push('/');
+  project.value = new Project();
+};
 
 </script>
