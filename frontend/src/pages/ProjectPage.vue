@@ -100,16 +100,6 @@ const DELETE_PROJECT = gql`
 
 const { mutate: deleteProject, error: deleteError } = useMutation(DELETE_PROJECT);
 
-const UPDATE_PROJECT = gql`
-       mutation updateProject($input: InputProject!) {
-         updateProject(input: $input) {
-           id
-         }
-       }
-    `;
-
-const { mutate: updateProject, error: updateError } = useMutation<Maybe<Project>,Project>(UPDATE_PROJECT);
-
 const remove = async () => {
   await deleteProject({ id: route.params.id });
   if (deleteError) {
@@ -118,19 +108,28 @@ const remove = async () => {
   router.push('/');
 };
 
+const UPDATE_PROJECT = gql`
+       mutation updateProject($id: String, $input: InputProject!) {
+         updateProject(id: $id, input: $input) {
+           id
+         }
+       }
+    `;
+
+const { mutate: updateProject, error: updateError } = useMutation(
+  UPDATE_PROJECT,
+  () => ({
+    variables: {
+      id: route.params.id,
+      input: InputProject{ name.value, owner.value, completed.value }
+    }
+  }
+}));
 
 const update = async () => {
   console.log('warren: update project=', route.params.id,name.value,owner.value,completed.value);
 
-  const r = await updateProject(
-    {
-      id: route.params.id,
-      input: {
-        name: name.value,
-        owner: owner.value,
-        completed: completed.value
-      }
-    });
+  const r = await updateProject();
   if (updateError) {
     console.log('warren: updateProject error=', updateError);
   }
