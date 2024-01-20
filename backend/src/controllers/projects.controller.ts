@@ -25,7 +25,9 @@ export class ProjectsController {
 
   @VerifyAuthorization
   addProject(inputObject: any, _: any) {
+    console.log("warren: addProject: start")
     return Projects.create(inputObject.input).then((projectInfo: any) => {
+      console.log("warren: addProject: projectInfo=", projectInfo)
       return projectInfo;
     });
   }

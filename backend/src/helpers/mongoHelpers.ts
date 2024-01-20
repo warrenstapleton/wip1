@@ -10,12 +10,16 @@ export class MongoHelper {
    */
   public async validateUser(req: any) {
     const token = req.headers.authorization || '';
+    console.log("warren: validateUser token=", token)
     try {
       const payload = <{ data: string; iat: number }>(
         jwt.verify(token, <string>process.env.auth_encryption_salt)
       );
+      console.log("warren: validateUser payload=", payload)
       const email = payload['data'];
+      console.log("warren: validateUser email=", email)
       return await User.find({ email: email }).then((response: any) => {
+        console.log("warren User response=", response)
         if (response.length > 0) {
           return { isUserLogged: true, email: email };
         }

@@ -3,9 +3,9 @@
     <ProjectContainer>
       <div v-if='editing'>
         <q-form @submit='update'>
-          <q-input v-model='name' label='Name' filled></q-input>
+          <q-input v-model='project.name' label='Name' filled></q-input>
           <q-input
-            v-model='owner'
+            v-model='project.owner'
             label='Owner'
             filled
             class='q-mt-sm'
@@ -13,7 +13,7 @@
           ></q-input>
           <q-card flat bordered class='q-mt-sm'>
             <!--            <q-editor v-model="project.content" min-height="5rem"></q-editor>-->
-            <q-checkbox v-model='completed'></q-checkbox>
+            <q-checkbox v-model='project.completed'></q-checkbox>
           </q-card>
           <div class='q-mt-md'>
             <q-btn class='q-ml-sm' color='positive' type='submit'>Done</q-btn>
@@ -21,15 +21,15 @@
         </q-form>
       </div>
       <div v-else>
-        <div v-if='project'>
+        <div v-if='!loading'>
           <div class='row items-center justify-between'>
-            <h3 class='q-mb-md q-mt-md'>{{ project.name }}</h3>
+            <h3 class='q-mb-md q-mt-md'>{{ result.project.name }}</h3>
             <div>
               <q-btn
                 round
                 color='secondary'
                 icon='edit'
-                @click='editing=true'
+                @click='edit'
               ></q-btn>
               <q-btn
                 class='q-ml-sm'
@@ -51,18 +51,22 @@
 <script setup lang='ts'>
 
 import ProjectContainer from 'components/ProjectContainer.vue';
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useMutation, useQuery } from '@vue/apollo-composable';
 import { gql } from '@apollo/client/core';
-import { Project } from 'components/models';
-import { Maybe } from 'graphql/jsutils/Maybe';
 
 const router = useRouter();
 const route = useRoute();
 const editing = ref(false);
 
-const { result } = useQuery(gql`
+const project = ref({
+  name: '',
+  owner: '',
+  completed: false
+});
+
+const { result, loading } = useQuery(gql`
       query project($id: ID!) {
         project(id: $id) {
           id
@@ -77,18 +81,13 @@ const { result } = useQuery(gql`
   }
 );
 
-const name = ref('');
-const owner = ref('');
-const completed = ref(false);
 
-watch(result, () => {
-  name.value = result.value.project.name;
-  owner.value = result.value.project.owner;
-  completed.value = result.value.project.completed;
-});
-
-const project = computed(() =>
-  result?.value?.project ?? {});
+const edit = () => {
+  editing.value = true
+  project.value.name = result.value.project.name
+  project.value.owner = result.value.project.owner
+  project.value.completed = result.value.project.completed
+}
 
 const DELETE_PROJECT = gql`
       mutation deleteProject($id: String) {
@@ -98,13 +97,10 @@ const DELETE_PROJECT = gql`
       }
     `;
 
-const { mutate: deleteProject, error: deleteError } = useMutation(DELETE_PROJECT);
+const { mutate: deleteProject } = useMutation(DELETE_PROJECT);
 
 const remove = async () => {
   await deleteProject({ id: route.params.id });
-  if (deleteError) {
-    console.log('warren: deleteProject error=', deleteError);
-  }
   router.push('/');
 };
 
@@ -116,24 +112,21 @@ const UPDATE_PROJECT = gql`
        }
     `;
 
-const { mutate: updateProject, error: updateError } = useMutation(
+const { mutate: updateProject } = useMutation(
   UPDATE_PROJECT,
   () => ({
     variables: {
       id: route.params.id,
-      input: InputProject{ name.value, owner.value, completed.value }
+      input: {
+        name: project.value.name,
+        owner: project.value.owner,
+        completed: project.value.completed
+      }
     }
-  }
-}));
+  }));
 
 const update = async () => {
-  console.log('warren: update project=', route.params.id,name.value,owner.value,completed.value);
-
-  const r = await updateProject();
-  if (updateError) {
-    console.log('warren: updateProject error=', updateError);
-  }
-  console.log('warren: update r=', r);
+  await updateProject();
   editing.value = false;
   router.push('/');
 };

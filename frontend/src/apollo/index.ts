@@ -8,7 +8,6 @@ export /* async */ function getClientOptions(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
   /* {app, router, ...} */ options?: Partial<BootFileParams<any>>
 ) {
-  console.log('warren: GRAPHQL_URI= env=', process.env)
   const httpLink = createHttpLink({
     uri:
       process.env.GRAPHQL_URI ||

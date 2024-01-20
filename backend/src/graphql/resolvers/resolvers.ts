@@ -58,6 +58,7 @@ const resolvers: IResolvers = {
       return usersController.updateUser(inputObject, ctx);
     },
     addProject: (_, inputObject, ctx: Context) => {
+      console.log("warren: addProject: inputObject=", inputObject)
       return projectController.addProject(inputObject, ctx);
     },
     updateProject: (_, inputObject, ctx: Context) => {

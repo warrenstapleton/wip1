@@ -53,9 +53,8 @@ const ADD_PROJECT = gql`
 
 const { mutate: addProject} = useMutation(ADD_PROJECT);
 
-const submit = () => {
-  console.log('warren: submit ADD_PROJECT=',ADD_PROJECT)
-  const r = addProject(
+const submit = async () => {
+  const r = await addProject(
     {
       input: {
         name: project.value.name,
@@ -64,10 +63,12 @@ const submit = () => {
       }
     }
   );
-  console.log('warren: addProject r=',r)
-  // projects.value.unshift(project.value)
   router.push('/');
-  project.value = new Project();
+  project.value = {
+    name: '',
+    owner: '',
+    completed: false
+  }
 };
 
 </script>
