@@ -1,9 +1,10 @@
 <template>
-  <q-page class='row  justify-evenly'>
-    <div class='q-pa-md'>
+  <q-page class='flex  class="column fit"'>
+    <div class='flex'>
       <q-table
         class='my-sticky-header-column-table'
         flat bordered
+        spread
         ref='tableRef'
         title='Projects'
         :rows='projects'
@@ -34,7 +35,7 @@
 <script setup lang='ts'>
 
 import { useRouter } from 'vue-router';
-import { computed, ref, onMounted} from 'vue';
+import { computed, ref, onMounted } from 'vue';
 
 const router = useRouter();
 
@@ -68,7 +69,7 @@ const columns = [
   }
 ];
 
-const tableRef = ref()
+const tableRef = ref();
 const selected = ref([]);
 const filter = ref('');
 
@@ -86,7 +87,7 @@ const pagination = ref({
   descending: false,
   page: 1,
   rowsPerPage: 3,
-  rowsNumber: 10
+  rowsNumber: 0 // total, returned from server
 });
 
 // function fetchfromServer(startRow: number, count: number, filter: any, sortBy: () => {}, descending: boolean) {
@@ -102,7 +103,7 @@ function onRequest(props: any) {
   const { page, rowsPerPage, sortBy, descending } = props.pagination;
   const filter = props.filter;
 
-  pagination.value.rowsNumber = getRowsNumberCount(filter)
+  pagination.value.rowsNumber = getRowsNumberCount(filter);
 
   pagination.value.page = page;
   pagination.value.rowsPerPage = rowsPerPage;
@@ -113,25 +114,35 @@ function onRequest(props: any) {
 
 onMounted(() => {
   // get initial data from server (1st page)
-  tableRef.value.requestServerInteraction()
-})
+  tableRef.value.requestServerInteraction();
+});
 
-const { result, loading } = useQuery(gql`
-      query projects {
-        projects {
-          id
-          name
-          owner
-          completed
+const { loading, result, fetchMore } = useQuery(gql`
+      query projects($offset: Int, $limit: Int) {
+        projects(offset: $offset, limit: $limit) {
+            name
         }
       }
     `,
-  null, {
-    fetchPolicy: 'network-only'
+  {
+    offset: 0,
+    limit: 10
+  },
+  {
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true
   }
 );
 
-const projects = computed(() => result?.value?.projects ?? []);
+function loadMore() {
+  fetchMore({
+    variables: {
+      offset: result.value.projects.length
+    }
+  });
+}
+
+const projects = computed(() => result?.value?.edges.projects ?? []);
 
 </script>
 
@@ -157,6 +168,7 @@ const projects = computed(() => result?.value?.projects ?? []);
 
   /* this will be the loading indicator */
 
+
   thead tr:last-child th
     /* height of all previous header rows */
     top: 48px
@@ -179,6 +191,7 @@ const projects = computed(() => result?.value?.projects ?? []);
     left: 0
 
   /* prevent scrolling behind sticky top row on focus */
+
 
   tbody
     /* height of all previous header rows */

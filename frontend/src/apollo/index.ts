@@ -1,4 +1,5 @@
 import type { ApolloClientOptions } from '@apollo/client/core'
+import { relayStylePagination } from '@apollo/client/utilities'
 import { ApolloLink, createHttpLink, InMemoryCache } from '@apollo/client/core';
 import type { BootFileParams } from '@quasar/app-vite'
 import { setContext } from '@apollo/client/link/context';
@@ -37,8 +38,15 @@ export /* async */ function getClientOptions(
     // General options.
     <ApolloClientOptions<unknown>>{
       link: ApolloLink.from([errorLink, authLink, httpLink]),
-
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        typePolicies: {
+          Query: {
+            fields: {
+              projects: relayStylePagination(),
+            },
+          },
+        },
+      }),
       connectToDevTools: true
     },
 
