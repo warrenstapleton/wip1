@@ -48,7 +48,6 @@ type Project {
 type Paginator {
   page: Int,
   limit: Int,
-  pagingCounter: Int,
   hasPrevPage: Boolean!,
   hasNextPage: Boolean!,
   prevPage: Int,

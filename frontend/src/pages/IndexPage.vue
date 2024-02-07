@@ -35,7 +35,7 @@
 <script setup lang='ts'>
 
 import { useRouter } from 'vue-router';
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 
 const router = useRouter();
 
@@ -86,7 +86,7 @@ const pagination = ref({
   sortBy: 'desc',
   descending: false,
   page: 1,
-  rowsPerPage: 3,
+  rowsPerPage: 2,
   rowsNumber: 0 // total, returned from server
 });
 
@@ -94,55 +94,49 @@ const pagination = ref({
 //
 // }
 
-function getRowsNumberCount(filter: string) {
-  return 10;
-}
+const { loading, result, variables } = useQuery(gql`
+      query getProjects($page: Int, $limit: Int) {
+        projects(page: $page, limit: $limit) {
+          projects {
+            name
+          }
+          paginator {
+            page
+            total
+          }
+        }
+      }
+    `,
+    {
+      page: 1,
+      limit: pagination.value.rowsPerPage
+    },
+    {
+      fetchPolicy: 'no-cache',
+      // fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true
+    }
+  );
 
 function onRequest(props: any) {
   console.log('warren onRequest=', props);
   const { page, rowsPerPage, sortBy, descending } = props.pagination;
   const filter = props.filter;
-
-  pagination.value.rowsNumber = getRowsNumberCount(filter);
-
+  variables.value.page = page;
+  variables.value.limit = pagination.value.rowsPerPage
   pagination.value.page = page;
   pagination.value.rowsPerPage = rowsPerPage;
-  pagination.value.sortBy = sortBy;
-  pagination.value.descending = descending;
-
 }
 
-onMounted(() => {
-  // get initial data from server (1st page)
-  tableRef.value.requestServerInteraction();
-});
-
-const { loading, result, fetchMore } = useQuery(gql`
-      query projects($offset: Int, $limit: Int) {
-        projects(offset: $offset, limit: $limit) {
-            name
-        }
-      }
-    `,
-  {
-    offset: 0,
-    limit: 10
-  },
-  {
-    fetchPolicy: 'network-only',
-    notifyOnNetworkStatusChange: true
+const projects = ref([])
+watch(result, () => {
+  console.log("warren: result changed to ", result.value)
+  if (result.value) {
+    projects.value = result.value.projects.projects
+    pagination.value.rowsNumber = result.value.projects.paginator.total
+    console.log("warren: updated pagination to ", pagination)
   }
-);
-
-function loadMore() {
-  fetchMore({
-    variables: {
-      offset: result.value.projects.length
-    }
-  });
-}
-
-const projects = computed(() => result?.value?.edges.projects ?? []);
+})
 
 </script>
 
@@ -168,7 +162,6 @@ const projects = computed(() => result?.value?.edges.projects ?? []);
 
   /* this will be the loading indicator */
 
-
   thead tr:last-child th
     /* height of all previous header rows */
     top: 48px
@@ -191,7 +184,6 @@ const projects = computed(() => result?.value?.edges.projects ?? []);
     left: 0
 
   /* prevent scrolling behind sticky top row on focus */
-
 
   tbody
     /* height of all previous header rows */

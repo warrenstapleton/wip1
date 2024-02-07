@@ -24,7 +24,8 @@ const resolvers: IResolvers = {
     token: (_, args: any) => {
       return jwt.sign({ data: args[AppConstants.EMAIL] }, <string>process.env.auth_encryption_salt);
     },
-    projects: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+    projects: (a: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
+      console.log("warren: projects: a=",a,"args=",args,"ctx=",ctx)
       return projectController.getProjects(args, ctx);
     },
     project: (_: void, args: any, ctx: Context, _info: GraphQLResolveInfo) => {
