@@ -2,5 +2,9 @@
   "@quasar/apollo": {
     "subscriptions": false,
     "graphql_url": "http://localhost:4000"
+  },
+  "@quasar/qmarkdown": {
+    "import_md": true,
+    "import_vmd": false
   }
 }

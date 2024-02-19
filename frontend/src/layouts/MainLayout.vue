@@ -1,42 +1,46 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view='hHh Lpr lFf'>
     <q-header elevated>
       <q-toolbar>
         <q-btn
           flat
           dense
           round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
+          icon='menu'
+          aria-label='Menu'
+          @click='toggleLeftDrawer'
         />
-
         <q-toolbar-title>
-          Quasar App
+          Mosaic App
         </q-toolbar-title>
-
         <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
     <q-drawer
-      v-model="leftDrawerOpen"
+      v-model='leftDrawerOpen'
       show-if-above
       bordered
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+      <q-scroll-area class='fit'>
+        <q-list padding class='menu-list'>
+          <q-item-label header>Links</q-item-label>
+          <q-item v-for='link in essentialLinks'
+                  :key='link.title'
+                  clickable
+                   v-ripple
+                  :to='link.link'
+          >
+            <q-item-section avatar>
+              <q-icon :name='link.icon'></q-icon>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label>{{ link.title }}</q-item-label>
+              <q-item-label caption>{{ link.caption }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
@@ -45,16 +49,28 @@
   </q-layout>
 </template>
 
-<script setup lang="ts">
+<script setup lang='ts'>
 import { ref } from 'vue';
-import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+// import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 
-const essentialLinks: EssentialLinkProps[] = [
+const essentialLinks = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
+    title: 'Documentation',
+    caption: 'Documentation',
     icon: 'school',
-    link: 'https://quasar.dev'
+    link: 'documentation'
+  },
+  {
+    title: 'Projects',
+    caption: 'Manage Projects',
+    icon: 'folder',
+    link: 'projects'
+  },
+  {
+    title: 'Editor',
+    caption: 'Edit Design',
+    icon: 'folder',
+    link: 'editor'
   },
   {
     title: 'Github',
@@ -94,9 +110,9 @@ const essentialLinks: EssentialLinkProps[] = [
   }
 ];
 
-const leftDrawerOpen = ref(false)
+const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
+  leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 </script>

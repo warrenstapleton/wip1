@@ -1,34 +1,6 @@
 <template>
-  <q-page class='flex  class="column fit"'>
-    <div class='flex'>
-      <q-table
-        class='my-sticky-header-column-table'
-        flat bordered
-        spread
-        ref='tableRef'
-        title='Projects'
-        :rows='projects'
-        :columns='columns'
-        row-key='id'
-        :selected-rows-label='getSelectedString'
-        selection='multiple'
-        v-model:selected='selected'
-        @row-dblclick='onRowClick'
-        :loading='loading'
-        :filter='filter'
-        v-model:pagination='pagination'
-        @request='onRequest'
-      >
-        <template v-slot:top-right>
-          <q-input borderless dense debounce='300' v-model='filter' placeholder='Search'>
-            <template v-slot:append>
-              <q-icon name='search' />
-              <q-btn round color='positive' icon='add' to='/new'></q-btn>
-            </template>
-          </q-input>
-        </template>
-      </q-table>
-    </div>
+  <q-page class='row no-wrap justify-center'>
+  <h1>Welcome</h1>
   </q-page>
 </template>
 
@@ -78,7 +50,7 @@ function getSelectedString() {
 }
 
 function onRowClick(evt: any, row: any) {
-  console.log('warren onRowClick evt=', evt);
+  console.log('warren onRowClick evt=', evt,'  row=',row);
   router.push(`/project/${row.id}`);
 }
 
@@ -98,7 +70,10 @@ const { loading, result, variables } = useQuery(gql`
       query getProjects($page: Int, $limit: Int) {
         projects(page: $page, limit: $limit) {
           projects {
+            id
             name
+            owner
+            completed
           }
           paginator {
             page

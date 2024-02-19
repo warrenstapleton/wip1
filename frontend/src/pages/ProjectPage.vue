@@ -3,7 +3,7 @@
     <ProjectContainer>
       <div v-if='editing'>
         <q-form @submit='update'>
-          <q-input v-model='project.name' label='Name' filled></q-input>
+          <q-input :readonly="false" v-model='result.project.name' label='Name' filled></q-input>
           <q-input
             v-model='project.owner'
             label='Owner'
@@ -22,26 +22,40 @@
       </div>
       <div v-else>
         <div v-if='!loading'>
-          <div class='row items-center justify-between'>
+          <div class='col items-center justify-between'>
             <h3 class='q-mb-md q-mt-md'>{{ result.project.name }}</h3>
+            <div>owner: {{ result.project.owner }}</div>
+            <div>Completed: <q-checkbox v-model='result.project.completed' :readonly='true'></q-checkbox></div>
             <div>
               <q-btn
                 round
                 color='secondary'
                 icon='edit'
-                @click='edit'
+                @click='editing = true'
               ></q-btn>
               <q-btn
                 class='q-ml-sm'
                 round
                 color='red'
                 icon='delete'
-                @click='remove'
+                @click='confirm = true'
               ></q-btn>
             </div>
           </div>
-          <div>{{ project.owner }}</div>
           <!--          <div class="q-mt-md" v-html="project.content"></div>-->
+          <q-dialog v-model="confirm" persistent>
+            <q-card>
+              <q-card-section class="row items-center">
+                <q-avatar icon="warning" color="warning" text-color="white" />
+                <span class="q-ml-sm">Permanently delete project '{{result.project.name}}'?</span>
+              </q-card-section>
+              <q-card-actions align="right">
+                <q-btn flat label="Cancel" color="primary" v-close-popup />
+                <q-btn flat label="Delete" color="primary" v-close-popup @click='remove'/>
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
+
         </div>
       </div>
     </ProjectContainer>
@@ -55,10 +69,12 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useMutation, useQuery } from '@vue/apollo-composable';
 import { gql } from '@apollo/client/core';
+import { Dialog } from 'quasar';
 
 const router = useRouter();
 const route = useRoute();
 const editing = ref(false);
+const confirm = ref(false);
 
 const project = ref({
   name: '',
@@ -78,6 +94,9 @@ const { result, loading } = useQuery(gql`
     `,
   {
     id: route.params.id
+  },
+  {
+    fetchPolicy: 'no-cache'
   }
 );
 
@@ -101,7 +120,7 @@ const { mutate: deleteProject } = useMutation(DELETE_PROJECT);
 
 const remove = async () => {
   await deleteProject({ id: route.params.id });
-  router.push('/');
+  router.back()
 };
 
 const UPDATE_PROJECT = gql`
@@ -128,6 +147,6 @@ const { mutate: updateProject } = useMutation(
 const update = async () => {
   await updateProject();
   editing.value = false;
-  router.push('/');
+  router.back()
 };
 </script>
